@@ -17,6 +17,7 @@ export default function UpcomingShows(props) {
         cardPadding,
         headingSize,
         bodySize,
+        bodySizeSm,
         buttonRadius,
     } = props
 
@@ -152,7 +153,7 @@ export default function UpcomingShows(props) {
                     style={{
                         justifySelf: "start",
                         marginTop: 8,
-                        padding: "8px 0px",
+                        padding: "8px 4px",
                         borderBottom: `1px solid ${textColor}`,
                         borderRight: `1px solid ${textColor}`,
                         borderRadius: buttonRadius,
@@ -160,7 +161,8 @@ export default function UpcomingShows(props) {
                         backgroundColor: accentColor,
                         textDecoration: "none",
                         textTransform: "uppercase",
-                        fontSize: bodySize,
+                        fontSize: bodySizeSm,
+                        fontWeight: "bold",
                         letterSpacing: "0.06em",
                     }}
                 >
@@ -265,6 +267,13 @@ addPropertyControls(UpcomingShows, {
         defaultValue: 16,
         min: 10,
         max: 20,
+    },
+     bodySizeSm: {
+        type: ControlType.Number,
+        title: "Body Size Sm",
+        defaultValue: 14,
+        min: 8,
+        max: 16,
     },
     buttonRadius: {
         type: ControlType.Number,
