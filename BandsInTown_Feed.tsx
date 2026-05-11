@@ -80,7 +80,7 @@ export default function UpcomingShows(props) {
     }
 
     const cardStyles = {
-        border: `1px solid ${borderColor}`,
+        backgroundColor: #e9e7d9,
         borderRadius: radius,
         padding: cardPadding,
     }
@@ -112,7 +112,7 @@ export default function UpcomingShows(props) {
             >
                 <div
                     style={{
-                        color: accentColor,
+                        color: mutedTextColor,
                         fontSize: bodySize,
                     }}
                 >
@@ -153,10 +153,12 @@ export default function UpcomingShows(props) {
                         justifySelf: "start",
                         marginTop: 8,
                         padding: "10px 14px",
-                        border: `1px solid ${accentColor}`,
+                        borderBottom: `1px solid ${textColor}`,
+                        borderRight: `1px solid ${textColor}`,
                         borderRadius: buttonRadius,
-                        color: accentColor,
-                        textDecoration: "none",
+                        color: textColor,
+                        backgroundColor: accentColor,
+                        textDecoration: "Uppercase",
                         fontSize: bodySize,
                         letterSpacing: "0.06em",
                     }}
