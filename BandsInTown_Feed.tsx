@@ -90,6 +90,14 @@ export default function UpcomingShows(props) {
         }
     }
 
+    console.log({
+        title: show.title,
+        venueName: show.venue?.name,
+        city: show.venue?.city,
+        region: show.venue?.region,
+        datetime: show.datetime,
+    })
+
     const baseStyles = {
         background: "transparent",
         color: textColor,
