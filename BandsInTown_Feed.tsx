@@ -90,14 +90,6 @@ export default function UpcomingShows(props) {
         }
     }
 
-    console.log({
-        title: show.title,
-        venueName: show.venue?.name,
-        city: show.venue?.city,
-        region: show.venue?.region,
-        datetime: show.datetime,
-    })
-
     const baseStyles = {
         background: "transparent",
         color: textColor,
@@ -127,6 +119,14 @@ export default function UpcomingShows(props) {
 
     function ShowCard({ show, featured = false }) {
         const cta = getCta(show)
+
+        console.log({
+            title: show.title,
+            venueName: show.venue?.name,
+            city: show.venue?.city,
+            region: show.venue?.region,
+            datetime: show.datetime,
+        })
 
         return (
             <article
