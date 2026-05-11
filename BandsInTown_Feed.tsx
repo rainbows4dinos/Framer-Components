@@ -74,7 +74,7 @@ export default function UpcomingShows(props) {
     }
 
     const baseStyles = {
-        background,
+        background: "transparent",
         color: textColor,
         padding,
         fontFamily: "inherit",
@@ -109,7 +109,7 @@ export default function UpcomingShows(props) {
                     ...cardStyles,
                     display: "grid",
                     gap: "8px",
-                    fontFamily: "sans-serif, Open Sans",
+                    fontFamily: "Open Sans,sans-serif",
                 }}
             >
                 <div
