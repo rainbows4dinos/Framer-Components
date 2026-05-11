@@ -153,7 +153,8 @@ export default function UpcomingShows(props) {
                     style={{
                         justifySelf: "start",
                         marginTop: 8,
-                        padding: "8px 4px",
+                        height: 28,
+                        padding: "0 8px",
                         borderBottom: `1px solid ${textColor}`,
                         borderRight: `1px solid ${textColor}`,
                         borderRadius: buttonRadius,
@@ -163,7 +164,6 @@ export default function UpcomingShows(props) {
                         textTransform: "uppercase",
                         fontSize: bodySizeSm,
                         fontWeight: "bold",
-                        letterSpacing: "0.06em",
                     }}
                 >
                     {cta.label}
