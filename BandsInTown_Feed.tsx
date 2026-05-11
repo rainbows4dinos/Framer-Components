@@ -151,7 +151,7 @@ export default function UpcomingShows(props) {
                     target="_blank"
                     rel="noreferrer"
                     style={{
-                        justifySelf: "start",
+                        justifySelf: "center",
                         marginTop: 8,
                         height: 28,
                         padding: "0 8px",
