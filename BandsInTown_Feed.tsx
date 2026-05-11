@@ -152,13 +152,14 @@ export default function UpcomingShows(props) {
                     style={{
                         justifySelf: "start",
                         marginTop: 8,
-                        padding: "10px 14px",
+                        padding: "0 8px",
                         borderBottom: `1px solid ${textColor}`,
                         borderRight: `1px solid ${textColor}`,
                         borderRadius: buttonRadius,
                         color: textColor,
                         backgroundColor: accentColor,
-                        textDecoration: "Uppercase",
+                        textDecoration: "none",
+                        textTransform: "uppercase",
                         fontSize: bodySize,
                         letterSpacing: "0.06em",
                     }}
