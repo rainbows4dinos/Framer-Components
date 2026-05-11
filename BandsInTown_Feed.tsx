@@ -224,7 +224,7 @@ addPropertyControls(UpcomingShows, {
     accentColor: {
         type: ControlType.Color,
         title: "Accent",
-        defaultValue: "#FF3B00",
+        defaultValue: "#FCE0A4",
     },
     radius: {
         type: ControlType.Number,
