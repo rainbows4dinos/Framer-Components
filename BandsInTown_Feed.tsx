@@ -127,7 +127,7 @@ export default function UpcomingShows(props) {
                         fontSize: bodySize,
                     }}
                 >
-                    {featured ? "Next Up" : formatDate(show.datetime)}
+                    {featured ? "Next Up" : formatTime(show.datetime)}
                 </div>
 
                 {featured && (
@@ -137,7 +137,7 @@ export default function UpcomingShows(props) {
                             color: mutedTextColor,
                         }}
                     >
-                        {formatDate(show.datetime)}
+                        {formatTime(show.datetime)}
                     </div>
                 )}
 
