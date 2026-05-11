@@ -1,0 +1,31 @@
+{
+  "name": "framer-components",
+  "version": "1.0.0",
+  "description": "Framer Components",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rainbows4dinos/Framer-Components.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/rainbows4dinos/Framer-Components/issues"
+  },
+  "homepage": "https://github.com/rainbows4dinos/Framer-Components#readme",
+  "dependencies": {
+    "framer": "^3.0.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "^6.0.3"
+  }
+}
