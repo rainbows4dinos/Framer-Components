@@ -52,6 +52,14 @@ export default function UpcomingShows(props) {
         loadShows()
     }, [artistName, appId])
 
+    function formatDate(datetime) {
+        return new Date(datetime).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+        })
+    }
+
     function formatTime(datetime) {
         return new Date(datetime).toLocaleTimeString("en-US", {
             hour: "numeric",
@@ -127,7 +135,7 @@ export default function UpcomingShows(props) {
                         fontSize: bodySize,
                     }}
                 >
-                    {featured ? "Next Up" : formatTime(show.datetime)}
+                    {featured ? "Next Up" : formatDate(show.datetime)}
                 </div>
 
                 {featured && (
@@ -137,7 +145,7 @@ export default function UpcomingShows(props) {
                             color: mutedTextColor,
                         }}
                     >
-                        {formatTime(show.datetime)}
+                        {formatDate(show.datetime)}
                     </div>
                 )}
 
