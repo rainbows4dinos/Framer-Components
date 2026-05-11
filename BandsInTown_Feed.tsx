@@ -52,12 +52,21 @@ export default function UpcomingShows(props) {
         loadShows()
     }, [artistName, appId])
 
-    function formatDate(datetime) {
-        return new Date(datetime).toLocaleDateString("en-US", {
-            month: "short",
-            day: "numeric",
-            year: "numeric",
+    function formatTime(datetime) {
+        return new Date(datetime).toLocaleTimeString("en-US", {
+            hour: "numeric",
+            minute: "2-digit",
         })
+    }
+
+    function getDescription(show) {
+        return [
+            show.venue?.name,
+            getLocation(show),
+            formatTime(show.datetime),
+        ]
+            .filter(Boolean)
+            .join(" · ")
     }
 
     function getLocation(show) {
