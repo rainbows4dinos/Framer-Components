@@ -80,7 +80,7 @@ export default function UpcomingShows(props) {
     }
 
     const cardStyles = {
-        backgroundColor: #e9e7d9,
+        backgroundColor: "#E9E7D9",
         borderRadius: radius,
         padding: cardPadding,
     }
