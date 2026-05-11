@@ -149,7 +149,6 @@ export default function UpcomingShows(props) {
                     </div>
                 )}
 
-                // Title
                 <h3
                     style={{
                         margin: 0,
@@ -159,13 +158,11 @@ export default function UpcomingShows(props) {
                 >
                     {show.title || artistName}
                 </h3>
-
-                // Description        
+       
                 <div style={{ fontSize: bodySize, color: mutedTextColor }}>
                     {getDescription(show)}
                 </div>
 
-                // CTA
                 <a
                     href={cta.url}
                     target="_blank"
