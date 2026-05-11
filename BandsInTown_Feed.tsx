@@ -108,7 +108,8 @@ export default function UpcomingShows(props) {
                 style={{
                     ...cardStyles,
                     display: "grid",
-                    gap: featured ? 16 : 8,
+                    gap: "8px",
+                    fontFamily: "sans-serif, Open Sans",
                 }}
             >
                 <div
@@ -134,7 +135,7 @@ export default function UpcomingShows(props) {
                 <h3
                     style={{
                         margin: 0,
-                        fontSize: featured ? headingSize * 1.4 : headingSize,
+                        fontSize: headingSize,
                         lineHeight: 1,
                     }}
                 >
@@ -155,7 +156,7 @@ export default function UpcomingShows(props) {
                         display: "flex",
                         alignItems: "center",
                         marginTop: 8,
-                        height: 28,
+                        height: "24px",
                         padding: "0 8px",
                         borderBottom: `1px solid ${textColor}`,
                         borderRight: `1px solid ${textColor}`,
