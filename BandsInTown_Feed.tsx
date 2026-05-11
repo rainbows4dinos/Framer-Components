@@ -199,22 +199,22 @@ addPropertyControls(UpcomingShows, {
     background: {
         type: ControlType.Color,
         title: "Background",
-        defaultValue: "#000000",
+        defaultValue: "none"
     },
     textColor: {
         type: ControlType.Color,
         title: "Text",
-        defaultValue: "#FFFFFF",
+        defaultValue: "#121212",
     },
     mutedTextColor: {
         type: ControlType.Color,
         title: "Muted Text",
-        defaultValue: "#A0A0A0",
+        defaultValue: "#323232",
     },
     borderColor: {
         type: ControlType.Color,
         title: "Border",
-        defaultValue: "#FFFFFF",
+        defaultValue: "#121212",
     },
     accentColor: {
         type: ControlType.Color,
@@ -252,16 +252,16 @@ addPropertyControls(UpcomingShows, {
     headingSize: {
         type: ControlType.Number,
         title: "Heading Size",
-        defaultValue: 28,
+        defaultValue: 16,
         min: 12,
-        max: 96,
+        max: 28,
     },
     bodySize: {
         type: ControlType.Number,
         title: "Body Size",
-        defaultValue: 14,
+        defaultValue: 16,
         min: 10,
-        max: 32,
+        max: 20,
     },
     buttonRadius: {
         type: ControlType.Number,
