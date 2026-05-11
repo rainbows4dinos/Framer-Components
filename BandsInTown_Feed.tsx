@@ -114,8 +114,6 @@ export default function UpcomingShows(props) {
                     style={{
                         color: accentColor,
                         fontSize: bodySize,
-                        textTransform: "uppercase",
-                        letterSpacing: "0.08em",
                     }}
                 >
                     {featured ? "Next Up" : formatDate(show.datetime)}
@@ -126,7 +124,6 @@ export default function UpcomingShows(props) {
                         style={{
                             fontSize: bodySize,
                             color: mutedTextColor,
-                            textTransform: "uppercase",
                         }}
                     >
                         {formatDate(show.datetime)}
@@ -138,7 +135,6 @@ export default function UpcomingShows(props) {
                         margin: 0,
                         fontSize: featured ? headingSize * 1.4 : headingSize,
                         lineHeight: 1,
-                        textTransform: "uppercase",
                     }}
                 >
                     {show.title || show.venue?.name}
@@ -162,7 +158,6 @@ export default function UpcomingShows(props) {
                         color: accentColor,
                         textDecoration: "none",
                         fontSize: bodySize,
-                        textTransform: "uppercase",
                         letterSpacing: "0.06em",
                     }}
                 >
