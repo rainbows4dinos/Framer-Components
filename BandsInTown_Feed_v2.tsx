@@ -165,24 +165,13 @@ export default function UpcomingShows(props) {
                 <div
                     style={{
                         fontSize: bodySizeSm,
+                        fontWeight: "bold",
                         color: textColor,
                         textTransform: "uppercase",
                     }}
                 >
                     {formatShowDate(show.datetime)}
                 </div>
-                
-
-                {/* <h3
-                    style={{
-                        margin: 0,
-                        fontSize: headingSize,
-                        fontWeight: "bold",
-                        lineHeight: 1,
-                    }}
-                >
-                    {getEventMeta(show) || artistName}
-                </h3> */}
 
                 <h3
                     style={{
@@ -192,7 +181,7 @@ export default function UpcomingShows(props) {
                     }}
                 >
                     <a
-                        href={show.url}
+                        href={cta.url}
                         target="_blank"
                         rel="noreferrer"
                         style={{
