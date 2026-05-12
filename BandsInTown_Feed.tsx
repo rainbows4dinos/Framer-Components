@@ -77,6 +77,16 @@ export default function UpcomingShows(props) {
             .join(" · ")
     }
 
+    function getTitle(show) {
+        return [
+            show.venue?.name,
+            getLocation(show),
+            formatTime(show.datetime),
+        ]
+            .filter(Boolean)
+            .join(" · ")
+    }
+
     function getLocation(show) {
         return [show.venue?.city, show.venue?.region].filter(Boolean).join(", ")
     }
@@ -126,6 +136,7 @@ export default function UpcomingShows(props) {
             city: show.venue?.city,
             region: show.venue?.region,
             datetime: show.datetime,
+            description: show.description,
         })
 
         return (
