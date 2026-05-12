@@ -68,14 +68,7 @@ export default function UpcomingShows(props) {
         })
     }
 
-    function getDescription(show) {
-        return [
-            show.description,
-           
-        ]
-    }
-
-    function getEventTitle(show) {
+    function getEventMeta(show) {
         return [
             show.venue?.name,
             getLocation(show),
@@ -83,6 +76,13 @@ export default function UpcomingShows(props) {
         ]
             .filter(Boolean)
             .join(" · ")
+    }
+
+    function getBilling(show) {
+        return [
+            show.description.trim() || ""
+           
+        ]
     }
 
     function getLocation(show) {
@@ -173,12 +173,12 @@ export default function UpcomingShows(props) {
                         lineHeight: 1,
                     }}
                 >
-                    {getEventTitle(show) || artistName}
+                    {getEventMeta(show) || artistName}
                 </h3>
        
-                <div style={{ fontSize: bodySize, color: mutedTextColor }}>
-                    {getDescription(show)}
-                </div>
+                <p style={{ fontSize: bodySize, color: mutedTextColor }}>
+                    {getBilling(show)}
+                </p>
 
                 <a
                     href={cta.url}
