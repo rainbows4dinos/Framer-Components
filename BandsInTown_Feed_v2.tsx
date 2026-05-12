@@ -128,14 +128,14 @@ export default function UpcomingShows(props) {
     function ShowCard({ show, featured = false }) {
         const cta = getCta(show)
 
-        console.log({
-            title: show.title,
-            venueName: show.venue?.name,
-            city: show.venue?.city,
-            region: show.venue?.region,
-            datetime: show.datetime,
-            description: show.description,
-        })
+        // console.log({
+        //     title: show.title,
+        //     venueName: show.venue?.name,
+        //     city: show.venue?.city,
+        //     region: show.venue?.region,
+        //     datetime: show.datetime,
+        //     description: show.description,
+        // })
 
         return (
             <article
@@ -152,7 +152,7 @@ export default function UpcomingShows(props) {
                         fontSize: bodySize,
                     }}
                 >
-                    {featured ? "Next Up" : formatDate(show.datetime)}
+                    {/* {featured ? "Next Up" : formatDate(show.datetime)} */}
                 </div>
 
                 {featured && (
