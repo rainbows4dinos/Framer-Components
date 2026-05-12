@@ -79,10 +79,17 @@ export default function UpcomingShows(props) {
     }
 
     function getBilling(show) {
-        return [
-            show.description.trim() || ""
-           
-        ]
+        const description = show.description?.trim()
+
+        if (description) return description
+
+        const lineup = Array.isArray(show.lineup)
+            ? show.lineup.filter(Boolean)
+            : []
+
+        if (lineup.length) return lineup.join(" / ")
+
+        return ""
     }
 
     function getLocation(show) {
