@@ -1,5 +1,6 @@
 import * as React from "react"
 import { addPropertyControls, ControlType } from "framer"
+import { motion } from "framer-motion"
 
 export default function UpcomingShows(props) {
     const {
