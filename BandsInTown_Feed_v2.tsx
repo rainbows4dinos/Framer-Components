@@ -148,23 +148,13 @@ export default function UpcomingShows(props) {
             >
                 <div
                     style={{
-                        color: mutedTextColor,
                         fontSize: bodySize,
+                        color: mutedTextColor,
                     }}
                 >
-                    {/* {featured ? "Next Up" : formatDate(show.datetime)} */}
+                    {formatDate(show.datetime)}
                 </div>
-
-                {featured && (
-                    <div
-                        style={{
-                            fontSize: bodySize,
-                            color: mutedTextColor,
-                        }}
-                    >
-                        {formatDate(show.datetime)}
-                    </div>
-                )}
+                
 
                 <h3
                     style={{
