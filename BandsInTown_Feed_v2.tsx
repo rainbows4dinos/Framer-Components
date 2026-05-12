@@ -67,28 +67,15 @@ export default function UpcomingShows(props) {
             })
             .toUpperCase()
 
-        const time = date.toLocaleTimeString("en-US", {
-            hour: "numeric",
-            minute: "2-digit",
-        })
+        const time = date
+            .toLocaleTimeString("en-US", {
+                hour: "numeric",
+                minute: "2-digit",
+            })
+            .replace(/\s?(AM|PM)/i, "")
 
         return `${weekday}, ${monthDay} - ${time}`
     }
-
-    // function formatDate(datetime) {
-    //     return new Date(datetime).toLocaleDateString("en-US", {
-    //         month: "short",
-    //         day: "numeric",
-    //         year: "numeric",
-    //     })
-    // }
-
-    // function formatTime(datetime) {
-    //     return new Date(datetime).toLocaleTimeString("en-US", {
-    //         hour: "numeric",
-    //         minute: "2-digit",
-    //     })
-    // }
 
     function getEventMeta(show) {
         return [
@@ -177,10 +164,8 @@ export default function UpcomingShows(props) {
                 <div
                     style={{
                         fontSize: bodySizeSm,
-                        color: mutedTextColor,
+                        color: textColor,
                         textTransform: "uppercase",
-                        fontWeight: "bold",
-                        letterSpacing: "0.01em",
                     }}
                 >
                     {formatShowDate(show.datetime)}
