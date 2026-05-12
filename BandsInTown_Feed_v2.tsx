@@ -9,6 +9,7 @@ export default function UpcomingShows(props) {
         showFeatured,
         background,
         textColor,
+        linkColor,
         mutedTextColor,
         borderColor,
         accentColor,
@@ -172,7 +173,7 @@ export default function UpcomingShows(props) {
                 </div>
                 
 
-                <h3
+                {/* <h3
                     style={{
                         margin: 0,
                         fontSize: headingSize,
@@ -181,6 +182,26 @@ export default function UpcomingShows(props) {
                     }}
                 >
                     {getEventMeta(show) || artistName}
+                </h3> */}
+
+                <h3
+                    style={{
+                        margin: 0,
+                        fontSize: headingSize,
+                        lineHeight: 1,
+                    }}
+                >
+                    <a
+                        href={show.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{
+                            textDecoration: "none",
+                            color: linkColor,
+                        }}
+                    >
+                        {getEventMeta(show) || artistName}
+                    </a>
                 </h3>
        
                 <p 
