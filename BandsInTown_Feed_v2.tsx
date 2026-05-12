@@ -157,6 +157,7 @@ export default function UpcomingShows(props) {
                         fontSize: bodySizeSm,
                         color: mutedTextColor,
                         textTransform: "uppercase",
+                        fontWeight: "bold",
                         letterSpacing: "0.01em",
                     }}
                 >
