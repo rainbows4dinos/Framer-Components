@@ -157,6 +157,7 @@ export default function UpcomingShows(props) {
                         fontSize: bodySizeSm,
                         color: mutedTextColor,
                         textTransform: "uppercase",
+                        letterSpacing: "0.01em",
                     }}
                 >
                     {formatDate(show.datetime)} · {formatTime(show.datetime)}
@@ -167,6 +168,7 @@ export default function UpcomingShows(props) {
                     style={{
                         margin: 0,
                         fontSize: headingSize,
+                        fontWeight: "bold",
                         lineHeight: 1,
                     }}
                 >
@@ -204,6 +206,7 @@ export default function UpcomingShows(props) {
                         textTransform: "uppercase",
                         fontSize: bodySizeSm,
                         fontWeight: "bold",
+                        letterSpacing: "0.01em",
                     }}
                 >
                     {cta.label}
@@ -250,6 +253,11 @@ addPropertyControls(UpcomingShows, {
         type: ControlType.Color,
         title: "Text",
         defaultValue: "#121212",
+    },
+    linkColor: {
+        type: ControlType.Color,
+        title: "Link",
+        defaultValue: "#806E00",
     },
     mutedTextColor: {
         type: ControlType.Color,
