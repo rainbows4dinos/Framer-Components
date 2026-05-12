@@ -154,8 +154,9 @@ export default function UpcomingShows(props) {
             >
                 <div
                     style={{
-                        fontSize: bodySize,
+                        fontSize: bodySizeSm,
                         color: mutedTextColor,
+                        textTransform: "uppercase",
                     }}
                 >
                     {formatDate(show.datetime)} · {formatTime(show.datetime)}
