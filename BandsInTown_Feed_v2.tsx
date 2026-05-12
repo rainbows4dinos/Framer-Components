@@ -176,7 +176,14 @@ export default function UpcomingShows(props) {
                     {getEventMeta(show) || artistName}
                 </h3>
        
-                <p style={{ fontSize: bodySize, color: mutedTextColor }}>
+                <p 
+                    style={{ 
+                        margin: 0,
+                        padding: 0,
+                        fontSize: bodySize, 
+                        color: mutedTextColor 
+                    }}
+                >
                     {getBilling(show)}
                 </p>
 
