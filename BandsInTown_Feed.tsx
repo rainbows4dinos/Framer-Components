@@ -69,15 +69,12 @@ export default function UpcomingShows(props) {
 
     function getDescription(show) {
         return [
-            show.venue?.name,
-            getLocation(show),
-            formatTime(show.datetime),
+            show.description,
+           
         ]
-            .filter(Boolean)
-            .join(" · ")
     }
 
-    function getTitle(show) {
+    function getEventTitle(show) {
         return [
             show.venue?.name,
             getLocation(show),
@@ -175,7 +172,7 @@ export default function UpcomingShows(props) {
                         lineHeight: 1,
                     }}
                 >
-                    {show.title || artistName}
+                    {getEventTitle(show) || artistName}
                 </h3>
        
                 <div style={{ fontSize: bodySize, color: mutedTextColor }}>
