@@ -53,20 +53,42 @@ export default function UpcomingShows(props) {
         loadShows()
     }, [artistName, appId])
 
-    function formatDate(datetime) {
-        return new Date(datetime).toLocaleDateString("en-US", {
-            month: "short",
-            day: "numeric",
-            year: "numeric",
-        })
-    }
+    function formatShowDate(datetime) {
+        const date = new Date(datetime)
 
-    function formatTime(datetime) {
-        return new Date(datetime).toLocaleTimeString("en-US", {
+        const weekday = date
+            .toLocaleDateString("en-US", { weekday: "long" })
+            .toUpperCase()
+
+        const monthDay = date
+            .toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+            })
+            .toUpperCase()
+
+        const time = date.toLocaleTimeString("en-US", {
             hour: "numeric",
             minute: "2-digit",
         })
+
+        return `${weekday}, ${monthDay} - ${time}`
     }
+
+    // function formatDate(datetime) {
+    //     return new Date(datetime).toLocaleDateString("en-US", {
+    //         month: "short",
+    //         day: "numeric",
+    //         year: "numeric",
+    //     })
+    // }
+
+    // function formatTime(datetime) {
+    //     return new Date(datetime).toLocaleTimeString("en-US", {
+    //         hour: "numeric",
+    //         minute: "2-digit",
+    //     })
+    // }
 
     function getEventMeta(show) {
         return [
@@ -161,7 +183,7 @@ export default function UpcomingShows(props) {
                         letterSpacing: "0.01em",
                     }}
                 >
-                    {formatDate(show.datetime)} · {formatTime(show.datetime)}
+                    {formatShowDate(show.datetime)}
                 </div>
                 
 
