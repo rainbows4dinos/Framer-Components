@@ -108,7 +108,7 @@ export default function UpcomingShows(props) {
         const offer = show.offers?.[0]
 
         return {
-            label: offer?.url ? "Tickets" : "Notify Me",
+            label: offer?.url ? "View Event" : "Notify Me",
             url: offer?.url || `${show.url}&trigger=notify_me`,
         }
     }
