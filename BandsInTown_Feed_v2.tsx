@@ -165,8 +165,8 @@ export default function UpcomingShows(props) {
                 <div
                     style={{
                         fontSize: bodySizeSm,
-                        fontWeight: "bold",
-                        color: textColor,
+                        fontWeight: "semibold",
+                        color: mutedTextColor,
                         textTransform: "uppercase",
                     }}
                 >
