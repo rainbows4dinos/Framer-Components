@@ -72,7 +72,6 @@ export default function UpcomingShows(props) {
         return [
             show.venue?.name,
             getLocation(show),
-            formatTime(show.datetime),
         ]
             .filter(Boolean)
             .join(" · ")
@@ -87,7 +86,7 @@ export default function UpcomingShows(props) {
             ? show.lineup.filter(Boolean)
             : []
 
-        if (lineup.length) return lineup.join(" / ")
+        if (lineup.length) return lineup.join(" , ")
 
         return ""
     }
@@ -159,7 +158,7 @@ export default function UpcomingShows(props) {
                         color: mutedTextColor,
                     }}
                 >
-                    {formatDate(show.datetime)}
+                    {formatDate(show.datetime)} · {formatTime(show.datetime)}
                 </div>
                 
 
