@@ -58,7 +58,7 @@ export default function UpcomingShows(props) {
         const date = new Date(datetime)
 
         const weekday = date
-            .toLocaleDateString("en-US", { weekday: "long" })
+            .toLocaleDateString("en-US", { weekday: "short" })
             .toUpperCase()
 
         const monthDay = date
