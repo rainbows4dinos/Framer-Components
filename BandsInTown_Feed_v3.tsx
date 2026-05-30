@@ -1,12 +1,13 @@
 import * as React from "react"
 import { addPropertyControls, ControlType } from "framer"
-import { motion } from "framer-motion"
 
 export default function UpcomingShows(props) {
     const {
         artistName,
         appId,
         showFeatured,
+        pageSize,
+        loadMoreLabel,
         background,
         textColor,
         linkColor,
@@ -26,6 +27,9 @@ export default function UpcomingShows(props) {
     const [shows, setShows] = React.useState([])
     const [loading, setLoading] = React.useState(true)
     const [error, setError] = React.useState(false)
+    const [visibleCount, setVisibleCount] = React.useState(0)
+
+    const paginationEnabled = pageSize > 0
 
     React.useEffect(() => {
         async function loadShows() {
@@ -53,6 +57,15 @@ export default function UpcomingShows(props) {
 
         loadShows()
     }, [artistName, appId])
+
+    React.useEffect(() => {
+        if (!paginationEnabled) {
+            setVisibleCount(shows.length)
+            return
+        }
+
+        setVisibleCount(Math.min(pageSize, shows.length))
+    }, [shows, pageSize, paginationEnabled])
 
     function formatShowDate(datetime) {
         const date = new Date(datetime)
@@ -140,6 +153,13 @@ export default function UpcomingShows(props) {
     }
 
     const [nextShow, ...otherShows] = shows
+    const listShows = showFeatured ? otherShows : shows
+    const effectiveVisibleCount = paginationEnabled
+        ? Math.max(visibleCount, Math.min(pageSize, listShows.length))
+        : listShows.length
+    const displayedShows = listShows.slice(0, effectiveVisibleCount)
+    const hasMore =
+        paginationEnabled && effectiveVisibleCount < listShows.length
 
     function ShowCard({ show, featured = false }) {
         const cta = getCta(show)
@@ -233,14 +253,51 @@ export default function UpcomingShows(props) {
         )
     }
 
+    const loadMoreButtonStyle = {
+        justifySelf: "start",
+        display: "flex",
+        alignItems: "center",
+        height: "24px",
+        padding: "0 8px",
+        border: "none",
+        borderBottom: `1px solid ${textColor}`,
+        borderRight: `1px solid ${textColor}`,
+        borderRadius: buttonRadius,
+        color: textColor,
+        backgroundColor: accentColor,
+        textTransform: "uppercase",
+        fontSize: bodySizeSm,
+        fontWeight: "bold",
+        letterSpacing: "0.01em",
+        cursor: "pointer",
+        fontFamily: "inherit",
+    }
+
     return (
         <section style={baseStyles}>
             <div style={{ display: "grid", gap }}>
                 {showFeatured && <ShowCard show={nextShow} featured />}
 
-                {(showFeatured ? otherShows : shows).map((show) => (
+                {displayedShows.map((show) => (
                     <ShowCard key={show.id} show={show} />
                 ))}
+
+                {hasMore && (
+                    <button
+                        type="button"
+                        style={loadMoreButtonStyle}
+                        onClick={() =>
+                            setVisibleCount((count) =>
+                                Math.min(
+                                    (count || pageSize) + pageSize,
+                                    listShows.length
+                                )
+                            )
+                        }
+                    >
+                        {loadMoreLabel}
+                    </button>
+                )}
             </div>
         </section>
     )
@@ -261,6 +318,21 @@ addPropertyControls(UpcomingShows, {
         type: ControlType.Boolean,
         title: "Feature Next",
         defaultValue: true,
+    },
+    pageSize: {
+        type: ControlType.Number,
+        title: "Per Page",
+        description: "0 = show all events",
+        defaultValue: 0,
+        min: 0,
+        max: 50,
+        step: 1,
+    },
+    loadMoreLabel: {
+        type: ControlType.String,
+        title: "Load More Label",
+        defaultValue: "Load more shows",
+        hidden: (props) => !props.pageSize,
     },
     background: {
         type: ControlType.Color,
