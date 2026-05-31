@@ -27,7 +27,7 @@ export default function UpcomingShows(props) {
     const [shows, setShows] = React.useState([])
     const [loading, setLoading] = React.useState(true)
     const [error, setError] = React.useState(false)
-    const [visibleCount, setVisibleCount] = React.useState(0)
+    const [visibleTotal, setVisibleTotal] = React.useState(0)
 
     const paginationEnabled = pageSize > 0
 
@@ -59,12 +59,9 @@ export default function UpcomingShows(props) {
     }, [artistName, appId])
 
     React.useEffect(() => {
-        if (!paginationEnabled) {
-            setVisibleCount(shows.length)
-            return
-        }
+        if (!paginationEnabled) return
 
-        setVisibleCount(Math.min(pageSize, shows.length))
+        setVisibleTotal(pageSize)
     }, [shows, pageSize, paginationEnabled])
 
     function formatShowDate(datetime) {
@@ -154,12 +151,18 @@ export default function UpcomingShows(props) {
 
     const [nextShow, ...otherShows] = shows
     const listShows = showFeatured ? otherShows : shows
-    const effectiveVisibleCount = paginationEnabled
-        ? Math.max(visibleCount, Math.min(pageSize, listShows.length))
+    const effectiveTotal = paginationEnabled
+        ? Math.max(visibleTotal, pageSize)
+        : showFeatured
+          ? 1 + listShows.length
+          : listShows.length
+    const listVisibleCount = paginationEnabled
+        ? showFeatured
+            ? Math.max(0, Math.min(effectiveTotal - 1, listShows.length))
+            : Math.min(effectiveTotal, listShows.length)
         : listShows.length
-    const displayedShows = listShows.slice(0, effectiveVisibleCount)
-    const hasMore =
-        paginationEnabled && effectiveVisibleCount < listShows.length
+    const displayedShows = listShows.slice(0, listVisibleCount)
+    const hasMore = paginationEnabled && listVisibleCount < listShows.length
 
     function ShowCard({ show, featured = false }) {
         const cta = getCta(show)
@@ -287,12 +290,15 @@ export default function UpcomingShows(props) {
                         type="button"
                         style={loadMoreButtonStyle}
                         onClick={() =>
-                            setVisibleCount((count) =>
-                                Math.min(
-                                    (count || pageSize) + pageSize,
-                                    listShows.length
+                            setVisibleTotal((total) => {
+                                const maxTotal = showFeatured
+                                    ? 1 + listShows.length
+                                    : listShows.length
+                                return Math.min(
+                                    (total || pageSize) + pageSize,
+                                    maxTotal
                                 )
-                            )
+                            })
                         }
                     >
                         {loadMoreLabel}
@@ -322,7 +328,7 @@ addPropertyControls(UpcomingShows, {
     pageSize: {
         type: ControlType.Number,
         title: "Per Page",
-        description: "0 = show all events",
+        description: "0 = show all. Counts featured show when Feature Next is on.",
         defaultValue: 0,
         min: 0,
         max: 50,
