@@ -224,7 +224,7 @@ export default function UpcomingShows(props) {
                         textTransform: "uppercase",
                         fontSize: bodySizeSm,
                         fontWeight: "bold",
-                        letterSpacing: "0.4px",
+                        letterSpacing: "-0.4px",
                     }}
                 >
                     {cta.label}
@@ -248,7 +248,7 @@ export default function UpcomingShows(props) {
         textTransform: "uppercase",
         fontSize: bodySizeSm,
         fontWeight: "bold",
-        letterSpacing: "0.4px",
+        letterSpacing: "-0.4px",
         cursor: "pointer",
         fontFamily: "Open Sans,sans-serif",
     }
