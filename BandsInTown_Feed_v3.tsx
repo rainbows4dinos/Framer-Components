@@ -257,7 +257,7 @@ export default function UpcomingShows(props) {
     }
 
     const loadMoreButtonStyle = {
-        justifySelf: "start",
+        justifySelf: "center",
         display: "flex",
         alignItems: "center",
         height: "24px",
