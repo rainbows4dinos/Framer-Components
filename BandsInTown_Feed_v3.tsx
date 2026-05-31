@@ -250,7 +250,7 @@ export default function UpcomingShows(props) {
         fontWeight: "bold",
         letterSpacing: "0.04px",
         cursor: "pointer",
-        fontFamily: "inherit",
+        fontFamily: "Open Sans,sans-serif",
     }
 
     return (
