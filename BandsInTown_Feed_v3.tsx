@@ -5,7 +5,6 @@ export default function UpcomingShows(props) {
     const {
         artistName,
         appId,
-        showFeatured,
         pageSize,
         loadMoreLabel,
         background,
@@ -66,18 +65,15 @@ export default function UpcomingShows(props) {
 
     function formatShowDate(datetime) {
         const date = new Date(datetime)
-
         const weekday = date
             .toLocaleDateString("en-US", { weekday: "short" })
             .toUpperCase()
-
         const monthDay = date
             .toLocaleDateString("en-US", {
                 month: "short",
                 day: "numeric",
             })
             .toUpperCase()
-
         const time = date
             .toLocaleTimeString("en-US", {
                 hour: "numeric",
@@ -99,7 +95,6 @@ export default function UpcomingShows(props) {
 
     function getBilling(show) {
         const description = show.description?.trim()
-
         if (description) return description
 
         const lineup = Array.isArray(show.lineup)
@@ -107,7 +102,6 @@ export default function UpcomingShows(props) {
             : []
 
         if (lineup.length) return lineup.join(" , ")
-
         return ""
     }
 
@@ -117,7 +111,6 @@ export default function UpcomingShows(props) {
 
     function getCta(show) {
         const offer = show.offers?.[0]
-
         return {
             label: offer?.url ? "View Event" : "Notify Me",
             url: offer?.url || `${show.url}&trigger=notify_me`,
@@ -149,33 +142,17 @@ export default function UpcomingShows(props) {
         return <div style={baseStyles}>No upcoming shows right now.</div>
     }
 
-    const [nextShow, ...otherShows] = shows
-    const listShows = showFeatured ? otherShows : shows
     const effectiveTotal = paginationEnabled
         ? Math.max(visibleTotal, pageSize)
-        : showFeatured
-          ? 1 + listShows.length
-          : listShows.length
-    const listVisibleCount = paginationEnabled
-        ? showFeatured
-            ? Math.max(0, Math.min(effectiveTotal - 1, listShows.length))
-            : Math.min(effectiveTotal, listShows.length)
-        : listShows.length
-    const displayedShows = listShows.slice(0, listVisibleCount)
-    const hasMore = paginationEnabled && listVisibleCount < listShows.length
+        : shows.length
+    const visibleCount = paginationEnabled
+        ? Math.min(effectiveTotal, shows.length)
+        : shows.length
+    const displayedShows = shows.slice(0, visibleCount)
+    const hasMore = paginationEnabled && visibleCount < shows.length
 
-    function ShowCard({ show, featured = false }) {
+    function ShowCard({ show }) {
         const cta = getCta(show)
-
-        // console.log({
-        //     title: show.title,
-        //     venueName: show.venue?.name,
-        //     city: show.venue?.city,
-        //     region: show.venue?.region,
-        //     datetime: show.datetime,
-        //     description: show.description,
-        // })
-
         return (
             <article
                 style={{
@@ -215,13 +192,13 @@ export default function UpcomingShows(props) {
                         {getEventMeta(show) || artistName}
                     </a>
                 </h3>
-       
-                <p 
-                    style={{ 
+
+                <p
+                    style={{
                         margin: 0,
                         padding: 0,
-                        fontSize: bodySize, 
-                        color: mutedTextColor 
+                        fontSize: bodySize,
+                        color: mutedTextColor,
                     }}
                 >
                     {getBilling(show)}
@@ -279,8 +256,6 @@ export default function UpcomingShows(props) {
     return (
         <section style={baseStyles}>
             <div style={{ display: "grid", gap }}>
-                {showFeatured && <ShowCard show={nextShow} featured />}
-
                 {displayedShows.map((show) => (
                     <ShowCard key={show.id} show={show} />
                 ))}
@@ -290,15 +265,12 @@ export default function UpcomingShows(props) {
                         type="button"
                         style={loadMoreButtonStyle}
                         onClick={() =>
-                            setVisibleTotal((total) => {
-                                const maxTotal = showFeatured
-                                    ? 1 + listShows.length
-                                    : listShows.length
-                                return Math.min(
+                            setVisibleTotal((total) =>
+                                Math.min(
                                     (total || pageSize) + pageSize,
-                                    maxTotal
+                                    shows.length
                                 )
-                            })
+                            )
                         }
                     >
                         {loadMoreLabel}
@@ -320,15 +292,10 @@ addPropertyControls(UpcomingShows, {
         title: "API Key",
         defaultValue: "",
     },
-    showFeatured: {
-        type: ControlType.Boolean,
-        title: "Feature Next",
-        defaultValue: true,
-    },
     pageSize: {
         type: ControlType.Number,
         title: "Per Page",
-        description: "0 = show all. Counts featured show when Feature Next is on.",
+        description: "0 = show all events",
         defaultValue: 0,
         min: 0,
         max: 50,
@@ -343,7 +310,7 @@ addPropertyControls(UpcomingShows, {
     background: {
         type: ControlType.Color,
         title: "Background",
-        defaultValue: "none"
+        defaultValue: "none",
     },
     textColor: {
         type: ControlType.Color,
@@ -412,7 +379,7 @@ addPropertyControls(UpcomingShows, {
         min: 10,
         max: 20,
     },
-     bodySizeSm: {
+    bodySizeSm: {
         type: ControlType.Number,
         title: "Body Size Sm",
         defaultValue: 14,
