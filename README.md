@@ -24,7 +24,8 @@ The feed can use your Framer design system instead of built-in styled buttons.
 
 **Behavior**
 
-- If nothing is linked, the feed uses the built-in **Load More** control (styled via Accent, Button Radius, etc.).
+- If nothing is linked (empty outlet), the feed uses the built-in **Load More** control (styled via Accent, Button Radius, etc.).
+- Built-in buttons always show when no component is connected to the outlet—even if Framer exposes an empty slot.
 - **`LoadMoreButton`** receives `label`, `onClick`, and `loading` via `cloneElement` (no wrapper `div`).
 - **No-code buttons** still use a clickable wrapper; **Load More Label** may not update their text.
 
@@ -35,6 +36,8 @@ For **dynamic label and URL per event** (View Event vs Notify Me, different tick
 1. Add `EventButton.tsx` to your Framer project (via sync).
 2. Place one **EventButton** instance on the canvas (styling preview only; props are overridden per card).
 3. Connect it to the feed’s **Event CTA Button** outlet.
+
+If the outlet is empty, each card shows the built-in CTA (`View Event` / `Notify Me`) automatically.
 
 The feed passes these props on each card via `cloneElement`:
 

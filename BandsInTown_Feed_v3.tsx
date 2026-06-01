@@ -1,11 +1,24 @@
 import * as React from "react"
 import { addPropertyControls, ControlType } from "framer"
 
+/** Framer may pass an empty slot object when ComponentInstance is unset but still truthy. */
+function isComponentInstanceConnected(instance: React.ReactNode) {
+    if (instance == null || instance === false) return false
+
+    let connected = false
+    React.Children.forEach(instance, (child) => {
+        if (child != null && child !== false) {
+            connected = true
+        }
+    })
+    return connected
+}
+
 function renderComponentInstance(
     instance: React.ReactNode,
     overrides: Record<string, unknown>
 ) {
-    if (!instance) return null
+    if (!isComponentInstanceConnected(instance)) return null
 
     return React.Children.map(instance, (child) =>
         React.isValidElement(child)
@@ -284,6 +297,87 @@ export default function UpcomingShows(props) {
     const displayedShows = shows.slice(0, visibleCount)
     const hasMore = paginationEnabled && visibleCount < shows.length
 
+    function renderEventCta(ctaButtonInstance, cta, show) {
+        const fallback = (
+            <ActionButton
+                align="start"
+                href={cta.url}
+                tokens={buttonTokens}
+                style={{ marginTop: 8 }}
+            >
+                {cta.label}
+            </ActionButton>
+        )
+
+        if (!isComponentInstanceConnected(ctaButtonInstance)) {
+            return fallback
+        }
+
+        const linked = renderComponentInstance(
+            ctaButtonInstance,
+            getCtaButtonOverrides(show, cta)
+        )
+
+        if (!linked) return fallback
+
+        return (
+            <div style={{ justifySelf: "start", marginTop: 8 }}>{linked}</div>
+        )
+    }
+
+    function renderLoadMore() {
+        const fallback = (
+            <ActionButton
+                align="center"
+                tokens={buttonTokens}
+                onClick={handleLoadMore}
+            >
+                {loadMoreLabel}
+            </ActionButton>
+        )
+
+        if (!isComponentInstanceConnected(loadMoreButton)) {
+            return fallback
+        }
+
+        if (isFeedCodeButton(loadMoreButton)) {
+            const linked = renderComponentInstance(
+                loadMoreButton,
+                getLoadMoreButtonOverrides()
+            )
+            return linked ? (
+                <div style={{ justifySelf: "center" }}>{linked}</div>
+            ) : (
+                fallback
+            )
+        }
+
+        const linked = renderComponentInstance(loadMoreButton, {
+            text: loadMoreLabel,
+            label: loadMoreLabel,
+            title: loadMoreLabel,
+        })
+
+        if (!linked) return fallback
+
+        return (
+            <div
+                role="button"
+                tabIndex={0}
+                style={{ justifySelf: "center", cursor: "pointer" }}
+                onClick={handleLoadMore}
+                onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault()
+                        handleLoadMore()
+                    }
+                }}
+            >
+                {linked}
+            </div>
+        )
+    }
+
     function ShowCard({ show }) {
         const cta = getCta(show)
 
@@ -338,23 +432,7 @@ export default function UpcomingShows(props) {
                     {getBilling(show)}
                 </p>
 
-                {ctaButton ? (
-                    <div style={{ justifySelf: "start", marginTop: 8 }}>
-                        {renderComponentInstance(
-                            ctaButton,
-                            getCtaButtonOverrides(show, cta)
-                        )}
-                    </div>
-                ) : (
-                    <ActionButton
-                        align="start"
-                        href={cta.url}
-                        tokens={buttonTokens}
-                        style={{ marginTop: 8 }}
-                    >
-                        {cta.label}
-                    </ActionButton>
-                )}
+                {renderEventCta(ctaButton, cta, show)}
             </article>
         )
     }
@@ -366,50 +444,7 @@ export default function UpcomingShows(props) {
                     <ShowCard key={show.id} show={show} />
                 ))}
 
-                {hasMore &&
-                    (loadMoreButton ? (
-                        <div style={{ justifySelf: "center" }}>
-                            {isFeedCodeButton(loadMoreButton)
-                                ? renderComponentInstance(
-                                      loadMoreButton,
-                                      getLoadMoreButtonOverrides()
-                                  )
-                                : (
-                                      <div
-                                          role="button"
-                                          tabIndex={0}
-                                          style={{ cursor: "pointer" }}
-                                          onClick={handleLoadMore}
-                                          onKeyDown={(event) => {
-                                              if (
-                                                  event.key === "Enter" ||
-                                                  event.key === " "
-                                              ) {
-                                                  event.preventDefault()
-                                                  handleLoadMore()
-                                              }
-                                          }}
-                                      >
-                                          {renderComponentInstance(
-                                              loadMoreButton,
-                                              {
-                                                  text: loadMoreLabel,
-                                                  label: loadMoreLabel,
-                                                  title: loadMoreLabel,
-                                              }
-                                          )}
-                                      </div>
-                                  )}
-                        </div>
-                    ) : (
-                        <ActionButton
-                            align="center"
-                            tokens={buttonTokens}
-                            onClick={handleLoadMore}
-                        >
-                            {loadMoreLabel}
-                        </ActionButton>
-                    ))}
+                {hasMore && renderLoadMore()}
             </div>
         </section>
     )
@@ -439,7 +474,7 @@ addPropertyControls(UpcomingShows, {
         type: ControlType.String,
         title: "Load More Label",
         defaultValue: "Load more shows",
-        hidden: (props) => !props.pageSize || !!props.loadMoreButton,
+        hidden: (props) => !props.pageSize,
     },
     loadMoreButton: {
         type: ControlType.ComponentInstance,
