@@ -1,12 +1,110 @@
 import * as React from "react"
 import { addPropertyControls, ControlType } from "framer"
 
+function renderComponentInstance(
+    instance: React.ReactNode,
+    overrides: Record<string, unknown>
+) {
+    if (!instance) return null
+
+    return React.Children.map(instance, (child) =>
+        React.isValidElement(child)
+            ? React.cloneElement(child, overrides)
+            : child
+    )
+}
+
+function getActionButtonStyle(
+    justifySelf: "start" | "center",
+    tokens: {
+        textColor: string
+        accentColor: string
+        buttonRadius: number
+        bodySizeSm: number
+    }
+) {
+    return {
+        justifySelf,
+        display: "flex",
+        alignItems: "center",
+        height: "24px",
+        padding: "0 8px",
+        borderBottom: `1px solid ${tokens.textColor}`,
+        borderRight: `1px solid ${tokens.textColor}`,
+        borderRadius: tokens.buttonRadius,
+        color: tokens.textColor,
+        backgroundColor: tokens.accentColor,
+        textTransform: "uppercase" as const,
+        fontSize: tokens.bodySizeSm,
+        fontWeight: "bold",
+        letterSpacing: "-0.4px",
+        fontFamily: "Open Sans,sans-serif",
+    }
+}
+
+function ActionButton({
+    align,
+    href,
+    onClick,
+    children,
+    tokens,
+    style = {},
+}: {
+    align: "start" | "center"
+    href?: string
+    onClick?: () => void
+    children: React.ReactNode
+    tokens: {
+        textColor: string
+        accentColor: string
+        buttonRadius: number
+        bodySizeSm: number
+    }
+    style?: React.CSSProperties
+}) {
+    const baseStyle = getActionButtonStyle(align, tokens)
+
+    if (href) {
+        return (
+            <a
+                href={href}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                    ...baseStyle,
+                    textDecoration: "none",
+                    ...style,
+                }}
+            >
+                {children}
+            </a>
+        )
+    }
+
+    return (
+        <button
+            type="button"
+            onClick={onClick}
+            style={{
+                ...baseStyle,
+                border: "none",
+                cursor: "pointer",
+                ...style,
+            }}
+        >
+            {children}
+        </button>
+    )
+}
+
 export default function UpcomingShows(props) {
     const {
         artistName,
         appId,
         pageSize,
         loadMoreLabel,
+        loadMoreButton,
+        ctaButton,
         background,
         textColor,
         linkColor,
@@ -24,6 +122,7 @@ export default function UpcomingShows(props) {
     } = props
 
     const [shows, setShows] = React.useState([])
+    const buttonTokens = { textColor, accentColor, buttonRadius, bodySizeSm }
     const [loading, setLoading] = React.useState(true)
     const [error, setError] = React.useState(false)
     const [visibleTotal, setVisibleTotal] = React.useState(0)
@@ -117,6 +216,23 @@ export default function UpcomingShows(props) {
         }
     }
 
+    function getCtaButtonOverrides(show, cta) {
+        return {
+            key: show.id,
+            label: cta.label,
+            link: cta.url,
+            text: cta.label,
+            title: cta.label,
+            loading: false,
+        }
+    }
+
+    function handleLoadMore() {
+        setVisibleTotal((total) =>
+            Math.min((total || pageSize) + pageSize, shows.length)
+        )
+    }
+
     const baseStyles = {
         background: "transparent",
         color: textColor,
@@ -153,6 +269,7 @@ export default function UpcomingShows(props) {
 
     function ShowCard({ show }) {
         const cta = getCta(show)
+
         return (
             <article
                 style={{
@@ -204,53 +321,25 @@ export default function UpcomingShows(props) {
                     {getBilling(show)}
                 </p>
 
-                <a
-                    href={cta.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    style={{
-                        justifySelf: "start",
-                        display: "flex",
-                        alignItems: "center",
-                        marginTop: 8,
-                        height: "24px",
-                        padding: "0 8px",
-                        borderBottom: `1px solid ${textColor}`,
-                        borderRight: `1px solid ${textColor}`,
-                        borderRadius: buttonRadius,
-                        color: textColor,
-                        backgroundColor: accentColor,
-                        textDecoration: "none",
-                        textTransform: "uppercase",
-                        fontSize: bodySizeSm,
-                        fontWeight: "bold",
-                        letterSpacing: "-0.4px",
-                    }}
-                >
-                    {cta.label}
-                </a>
+                {ctaButton ? (
+                    <div style={{ justifySelf: "start", marginTop: 8 }}>
+                        {renderComponentInstance(
+                            ctaButton,
+                            getCtaButtonOverrides(show, cta)
+                        )}
+                    </div>
+                ) : (
+                    <ActionButton
+                        align="start"
+                        href={cta.url}
+                        tokens={buttonTokens}
+                        style={{ marginTop: 8 }}
+                    >
+                        {cta.label}
+                    </ActionButton>
+                )}
             </article>
         )
-    }
-
-    const loadMoreButtonStyle = {
-        justifySelf: "center",
-        display: "flex",
-        alignItems: "center",
-        height: "24px",
-        padding: "0 8px",
-        border: "none",
-        borderBottom: `1px solid ${textColor}`,
-        borderRight: `1px solid ${textColor}`,
-        borderRadius: buttonRadius,
-        color: textColor,
-        backgroundColor: accentColor,
-        textTransform: "uppercase",
-        fontSize: bodySizeSm,
-        fontWeight: "bold",
-        letterSpacing: "-0.4px",
-        cursor: "pointer",
-        fontFamily: "Open Sans,sans-serif",
     }
 
     return (
@@ -260,22 +349,38 @@ export default function UpcomingShows(props) {
                     <ShowCard key={show.id} show={show} />
                 ))}
 
-                {hasMore && (
-                    <button
-                        type="button"
-                        style={loadMoreButtonStyle}
-                        onClick={() =>
-                            setVisibleTotal((total) =>
-                                Math.min(
-                                    (total || pageSize) + pageSize,
-                                    shows.length
-                                )
-                            )
-                        }
-                    >
-                        {loadMoreLabel}
-                    </button>
-                )}
+                {hasMore &&
+                    (loadMoreButton ? (
+                        <div
+                            role="button"
+                            tabIndex={0}
+                            style={{ justifySelf: "center", cursor: "pointer" }}
+                            onClick={handleLoadMore}
+                            onKeyDown={(event) => {
+                                if (
+                                    event.key === "Enter" ||
+                                    event.key === " "
+                                ) {
+                                    event.preventDefault()
+                                    handleLoadMore()
+                                }
+                            }}
+                        >
+                            {renderComponentInstance(loadMoreButton, {
+                                text: loadMoreLabel,
+                                label: loadMoreLabel,
+                                title: loadMoreLabel,
+                            })}
+                        </div>
+                    ) : (
+                        <ActionButton
+                            align="center"
+                            tokens={buttonTokens}
+                            onClick={handleLoadMore}
+                        >
+                            {loadMoreLabel}
+                        </ActionButton>
+                    ))}
             </div>
         </section>
     )
@@ -305,7 +410,19 @@ addPropertyControls(UpcomingShows, {
         type: ControlType.String,
         title: "Load More Label",
         defaultValue: "Load more shows",
-        hidden: (props) => !props.pageSize,
+        hidden: (props) => !props.pageSize || !!props.loadMoreButton,
+    },
+    loadMoreButton: {
+        type: ControlType.ComponentInstance,
+        title: "Load More Button",
+        description:
+            "Link a Framer button. Label may stay static on no-code buttons; click is handled by the wrapper.",
+    },
+    ctaButton: {
+        type: ControlType.ComponentInstance,
+        title: "Event CTA Button",
+        description:
+            "Link EventButton code component for dynamic label/link per show. No-code buttons won't update per card.",
     },
     background: {
         type: ControlType.Color,
