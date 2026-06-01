@@ -107,7 +107,8 @@ function ActionButton({
             onClick={onClick}
             style={{
                 ...baseStyle,
-                border: "none",
+                borderTop: "none",
+                borderLeft: "none",
                 cursor: "pointer",
                 ...style,
             }}
