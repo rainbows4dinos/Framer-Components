@@ -2,14 +2,14 @@ import * as React from "react"
 import { addPropertyControls, ControlType } from "framer"
 
 /**
- * Thin code button for use with BandsInTown_Feed_v3 via the Event CTA Button outlet.
- * Accepts label, link, and loading so the feed can clone one instance per event card.
+ * Code button for BandsInTown_Feed_v3 Load More Button outlet.
+ * Accepts label, onClick, and loading from the feed via cloneElement.
  */
-export default function EventButton(props) {
+export default function LoadMoreButton(props) {
     const {
-        label = "View Event",
-        link,
+        label = "Load more shows",
         loading = false,
+        onClick,
         textColor = "#121212",
         accentColor = "#FCE0A4",
         buttonRadius = 0,
@@ -22,14 +22,12 @@ export default function EventButton(props) {
         justifyContent: "center",
         height: "24px",
         padding: "0 8px",
+        border: "none",
         borderBottom: `1px solid ${textColor}`,
         borderRight: `1px solid ${textColor}`,
         borderRadius: buttonRadius,
-        borderTop: "none",
-        borderLeft: "none",
         color: textColor,
         backgroundColor: accentColor,
-        textDecoration: "none",
         textTransform: "uppercase",
         fontSize: bodySizeSm,
         fontWeight: "bold",
@@ -37,37 +35,27 @@ export default function EventButton(props) {
         fontFamily: "Open Sans,sans-serif",
         cursor: loading ? "wait" : "pointer",
         opacity: loading ? 0.7 : 1,
-        pointerEvents: loading ? "none" : "auto",
-    }
-
-    const content = loading ? "Loading…" : label
-
-    if (link && !loading) {
-        return (
-            <a href={link} target="_blank" rel="noreferrer" style={style}>
-                {content}
-            </a>
-        )
     }
 
     return (
-        <button type="button" disabled={loading} style={style}>
-            {content}
+        <button
+            type="button"
+            disabled={loading}
+            onClick={onClick}
+            style={style}
+        >
+            {loading ? "Loading…" : label}
         </button>
     )
 }
 
-EventButton.isFeedCodeButton = true
+LoadMoreButton.isFeedCodeButton = true
 
-addPropertyControls(EventButton, {
+addPropertyControls(LoadMoreButton, {
     label: {
         type: ControlType.String,
         title: "Label",
-        defaultValue: "View Event",
-    },
-    link: {
-        type: ControlType.Link,
-        title: "Link",
+        defaultValue: "Load more shows",
     },
     loading: {
         type: ControlType.Boolean,

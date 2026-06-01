@@ -14,6 +14,13 @@ function renderComponentInstance(
     )
 }
 
+function isFeedCodeButton(instance: React.ReactNode) {
+    if (!React.isValidElement(instance)) return false
+
+    const type = instance.type as { isFeedCodeButton?: boolean }
+    return type?.isFeedCodeButton === true
+}
+
 function getActionButtonStyle(
     justifySelf: "start" | "center",
     tokens: {
@@ -227,6 +234,16 @@ export default function UpcomingShows(props) {
         }
     }
 
+    function getLoadMoreButtonOverrides() {
+        return {
+            label: loadMoreLabel,
+            text: loadMoreLabel,
+            title: loadMoreLabel,
+            loading: false,
+            onClick: handleLoadMore,
+        }
+    }
+
     function handleLoadMore() {
         setVisibleTotal((total) =>
             Math.min((total || pageSize) + pageSize, shows.length)
@@ -351,26 +368,38 @@ export default function UpcomingShows(props) {
 
                 {hasMore &&
                     (loadMoreButton ? (
-                        <div
-                            role="button"
-                            tabIndex={0}
-                            style={{ justifySelf: "center", cursor: "pointer" }}
-                            onClick={handleLoadMore}
-                            onKeyDown={(event) => {
-                                if (
-                                    event.key === "Enter" ||
-                                    event.key === " "
-                                ) {
-                                    event.preventDefault()
-                                    handleLoadMore()
-                                }
-                            }}
-                        >
-                            {renderComponentInstance(loadMoreButton, {
-                                text: loadMoreLabel,
-                                label: loadMoreLabel,
-                                title: loadMoreLabel,
-                            })}
+                        <div style={{ justifySelf: "center" }}>
+                            {isFeedCodeButton(loadMoreButton)
+                                ? renderComponentInstance(
+                                      loadMoreButton,
+                                      getLoadMoreButtonOverrides()
+                                  )
+                                : (
+                                      <div
+                                          role="button"
+                                          tabIndex={0}
+                                          style={{ cursor: "pointer" }}
+                                          onClick={handleLoadMore}
+                                          onKeyDown={(event) => {
+                                              if (
+                                                  event.key === "Enter" ||
+                                                  event.key === " "
+                                              ) {
+                                                  event.preventDefault()
+                                                  handleLoadMore()
+                                              }
+                                          }}
+                                      >
+                                          {renderComponentInstance(
+                                              loadMoreButton,
+                                              {
+                                                  text: loadMoreLabel,
+                                                  label: loadMoreLabel,
+                                                  title: loadMoreLabel,
+                                              }
+                                          )}
+                                      </div>
+                                  )}
                         </div>
                     ) : (
                         <ActionButton
@@ -416,7 +445,7 @@ addPropertyControls(UpcomingShows, {
         type: ControlType.ComponentInstance,
         title: "Load More Button",
         description:
-            "Link a Framer button. Label may stay static on no-code buttons; click is handled by the wrapper.",
+            "Link LoadMoreButton for label + click, or a visual button (wrapper handles click).",
     },
     ctaButton: {
         type: ControlType.ComponentInstance,
