@@ -1,6 +1,16 @@
 import * as React from "react"
 import { addPropertyControls, ControlType } from "framer"
 
+const BANDSINTOWN_API_VERSION = "v3.1"
+
+function buildEventsUrl(artist: string, appId: string) {
+    const artistPath = artist.trim().startsWith("id_")
+        ? artist.trim()
+        : encodeURIComponent(artist.trim())
+
+    return `https://rest.bandsintown.com/${BANDSINTOWN_API_VERSION}/artists/${artistPath}/events/?app_id=${encodeURIComponent(appId)}&date=upcoming`
+}
+
 /** Framer may pass an empty slot object when ComponentInstance is unset but still truthy. */
 function isComponentInstanceConnected(instance: React.ReactNode) {
     if (instance == null || instance === false) return false
@@ -158,12 +168,15 @@ export default function UpcomingShows(props) {
             }
 
             try {
-                const url = `https://rest.bandsintown.com/artists/${encodeURIComponent(
-                    artistName
-                )}/events/?app_id=${appId}`
-
+                const url = buildEventsUrl(artistName, appId)
                 const res = await fetch(url)
                 const data = await res.json()
+
+                if (!res.ok) {
+                    console.error("Bandsintown error:", res.status, data)
+                    setError(true)
+                    return
+                }
 
                 setShows(Array.isArray(data) ? data : [])
             } catch (err) {
@@ -183,8 +196,11 @@ export default function UpcomingShows(props) {
         setVisibleTotal(pageSize)
     }, [shows, pageSize, paginationEnabled])
 
-    function formatShowDate(datetime) {
-        const date = new Date(datetime)
+    function formatShowDate(show) {
+        const iso = show.datetime || show.starts_at
+        if (!iso) return ""
+
+        const date = new Date(iso)
         const weekday = date
             .toLocaleDateString("en-US", { weekday: "short" })
             .toUpperCase()
@@ -399,7 +415,7 @@ export default function UpcomingShows(props) {
                         textTransform: "uppercase",
                     }}
                 >
-                    {formatShowDate(show.datetime)}
+                    {formatShowDate(show)}
                 </div>
 
                 <h3
@@ -455,7 +471,9 @@ addPropertyControls(UpcomingShows, {
     artistName: {
         type: ControlType.String,
         title: "Artist",
-        defaultValue: "Merwulf",
+        description:
+            "Artist name or Bandsintown id (e.g. id_15536048). API v3.1.",
+        defaultValue: "id_15536048",
     },
     appId: {
         type: ControlType.String,

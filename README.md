@@ -70,6 +70,22 @@ The feed passes these props on each card via `cloneElement`:
 3. Sync from Framer.
 4. Avoid editing the same code file in Framer and locally at the same time.
 
-## Bandsintown note
+## Bandsintown API
 
-Event titles come from the `description` field when events are configured “by venue” in Bandsintown. See inline helpers `getBilling` and `getEventMeta` in the feed component.
+The feed uses **API v3.1**:
+
+```text
+https://rest.bandsintown.com/v3.1/artists/{artist}/events/?app_id=...&date=upcoming
+```
+
+Set **Artist** to your Bandsintown artist id (recommended, e.g. `id_15536048`) or artist name. Find the id in Bandsintown for Artists or from an API response’s `artist_id` field.
+
+### Event fields (v3.1)
+
+| UI | Source |
+|----|--------|
+| Headline | `venue.name` + city/region |
+| Secondary line | `description` (lineup/price), else `lineup` |
+| Date/time | `datetime` or `starts_at` |
+
+`title` may still be empty for “by venue” shows; lineup/billing in `description` is intentional.
